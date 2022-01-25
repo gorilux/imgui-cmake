@@ -10,8 +10,7 @@ include(CMakeImplFiles.cmake)
 ##################################################################################################################
 # Setup (change imgui version according to your needs)
 ##################################################################################################################
-project(imgui
-        VERSION 1.71
+project(imgui        
         LANGUAGES CXX
         DESCRIPTION "ImGui library."
 )
@@ -35,36 +34,38 @@ if (WIN32)
   endif()
 endif()
 
-set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/imgui)
-set(EXAMPLES_DIR ${SOURCE_DIR}/examples)
-set(FONTS_DIR ${SOURCE_DIR}/misc/fonts)
+set(IMGUI_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/imgui)
+set(IMGUI_EXAMPLES_DIR ${IMGUI_SOURCE_DIR}/examples)
+set(IMGUI_BACKENDS_DIR ${IMGUI_SOURCE_DIR}/backends)
+set(IMGUI_FONTS_DIR ${IMGUI_SOURCE_DIR}/misc/fonts)
 
 
 ##################################################################################################################
 # Project Files
 ##################################################################################################################
-set(HEADERS_CXX_FILES 
-    ${SOURCE_DIR}/imgui.h
-    ${SOURCE_DIR}/imconfig.h
-    ${SOURCE_DIR}/imgui_internal.h
-    ${SOURCE_DIR}/imstb_rectpack.h
-    ${SOURCE_DIR}/imstb_textedit.h
-    ${SOURCE_DIR}/imstb_truetype.h
+set(IMGUI_HEADERS_CXX_FILES 
+    ${IMGUI_SOURCE_DIR}/imgui.h
+    ${IMGUI_SOURCE_DIR}/imconfig.h
+    ${IMGUI_SOURCE_DIR}/imgui_internal.h
+    ${IMGUI_SOURCE_DIR}/imstb_rectpack.h
+    ${IMGUI_SOURCE_DIR}/imstb_textedit.h
+    ${IMGUI_SOURCE_DIR}/imstb_truetype.h
 )
 
-set(SOURCES_CXX_FILES 
-    ${SOURCE_DIR}/imgui.cpp
-    ${SOURCE_DIR}/imgui_draw.cpp
-    ${SOURCE_DIR}/imgui_widgets.cpp
-    ${SOURCE_DIR}/imgui_demo.cpp
+set(IMGUI_SOURCES_CXX_FILES 
+    ${IMGUI_SOURCE_DIR}/imgui.cpp
+    ${IMGUI_SOURCE_DIR}/imgui_draw.cpp
+    ${IMGUI_SOURCE_DIR}/imgui_widgets.cpp
+    ${IMGUI_SOURCE_DIR}/imgui_tables.cpp
+    ${IMGUI_SOURCE_DIR}/imgui_demo.cpp
 )
 
-file(GLOB FONTS_FILES ${FONTS_DIR}/*.ttf)
+file(GLOB IMGUI_FONTS_FILES ${IMGUI_FONTS_DIR}/*.ttf)
 
-set(HEADERS_CXX_IMPL_FILES)
-set(SOURCES_CXX_IMPL_FILES)
+set(IMGUI_HEADERS_CXX_IMPL_FILES)
+set(IMGUI_SOURCES_CXX_IMPL_FILES)
 if (IMGUI_WITH_IMPL)
-  Init_Impl_Files(HEADERS_CXX_IMPL_FILES SOURCES_CXX_IMPL_FILES)
+  Init_Impl_Files(IMGUI_HEADERS_CXX_IMPL_FILES IMGUI_SOURCES_CXX_IMPL_FILES)
 endif()
 
 
@@ -75,19 +76,19 @@ endif()
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 source_group("Header Files" FILES
-    ${HEADERS_CXX_FILES}
+    ${IMGUI_HEADERS_CXX_FILES}
 )
 source_group("Header Files\\Impl" FILES
-    ${HEADERS_CXX_IMPL_FILES}
+    ${IMGUI_HEADERS_CXX_IMPL_FILES}
 )
 source_group("Source Files" FILES
-    ${SOURCES_CXX_FILES}
+    ${IMGUI_SOURCES_CXX_FILES}
 )
 source_group("Source Files\\Impl" FILES
-    ${SOURCES_CXX_IMPL_FILES}
+    ${IMGUI_SOURCES_CXX_IMPL_FILES}
 )
 source_group("Resource Files" FILES
-    ${FONTS_FILES}
+    ${IMGUI_FONTS_FILES}
 )
 
 
@@ -95,20 +96,31 @@ source_group("Resource Files" FILES
 # Target
 ##################################################################################################################
 add_library(${PROJECT_NAME} 
-    ${HEADERS_CXX_FILES}
-    ${SOURCES_CXX_FILES}
-    ${HEADERS_CXX_IMPL_FILES}
-    ${SOURCES_CXX_IMPL_FILES}
-    ${FONTS_FILES}
+    ${IMGUI_HEADERS_CXX_FILES}
+    ${IMGUI_SOURCES_CXX_FILES}
+    ${IMGUI_HEADERS_CXX_IMPL_FILES}
+    ${IMGUI_SOURCES_CXX_IMPL_FILES}
+    ${IMGUI_FONTS_FILES}
 )
 target_include_directories(${PROJECT_NAME} PUBLIC 
-    ${SOURCE_DIR}
-    ${SOURCE_DIR}/examples
+    ${IMGUI_SOURCE_DIR}
+    ${IMGUI_SOURCE_DIR}/examples
+    ${IMGUI_SOURCE_DIR}/backends
 )
 if(IMGUI_IMPL_DX12 AND NOT IMGUI_STATIC_LIBRARY)
     target_link_libraries(${PROJECT_NAME} PUBLIC d3d12)
 endif()
 
+
+if(IMGUI_IMPL_SDL_OPENGL3 AND ${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
+target_compile_options(${PROJECT_NAME} PUBLIC -s USE_SDL=2 )
+target_link_options(${PROJECT_NAME} PUBLIC "-s WASM=1")
+target_link_options(${PROJECT_NAME} PUBLIC "-s ALLOW_MEMORY_GROWTH=1")
+target_link_libraries(${PROJECT_NAME} PUBLIC "-s DISABLE_EXCEPTION_CATCHING=1" "-s NO_EXIT_RUNTIME=0" "-s USE_SDL=2")
+target_link_libraries(${PROJECT_NAME} PUBLIC "-s ASSERTIONS=1")
+target_link_libraries(${PROJECT_NAME} PUBLIC --no-heap-copy "--preload-file ${IMGUI_SOURCE_DIR}/misc/fonts@/fonts")
+
+endif()
 
 ##################################################################################################################
 # Target Install
@@ -121,11 +133,11 @@ install(
     ARCHIVE DESTINATION ${DISTRIBUTE_DIR}/lib
 )
 install(
-    FILES ${HEADERS_CXX_FILES} ${HEADERS_CXX_IMPL_FILES}
+    FILES ${IMGUI_HEADERS_CXX_FILES} ${IMGUI_HEADERS_CXX_IMPL_FILES}
     DESTINATION ${DISTRIBUTE_DIR}/include
 )
 install(
-    FILES ${FONTS_FILES}
+    FILES ${IMGUI_FONTS_FILES}
     DESTINATION ${DISTRIBUTE_DIR}/misc/fonts
 )
 
