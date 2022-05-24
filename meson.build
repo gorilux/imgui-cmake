@@ -3,13 +3,25 @@ project('imgui', 'cpp',
     license: 'MIT',
 )
 
-include_dirs = include_directories('imgui', 'imgui/backends')
+include_dirs = include_directories('imgui', 'imgui/backends', 'imgui-node-editor')
 sources = [
     'imgui/imgui_demo.cpp', 
     'imgui/imgui_draw.cpp', 
     'imgui/imgui_tables.cpp', 
     'imgui/imgui_widgets.cpp', 
-    'imgui/imgui.cpp'
+    'imgui/imgui.cpp',
+    'imgui-node-editor/crude_json.cpp',
+    'imgui-node-editor/crude_json.h',
+    'imgui-node-editor/imgui_bezier_math.h',    
+    'imgui-node-editor/imgui_canvas.cpp',
+    'imgui-node-editor/imgui_canvas.cpp',
+    'imgui-node-editor/imgui_canvas.h',
+    'imgui-node-editor/imgui_canvas.h',
+    'imgui-node-editor/imgui_extra_math.h',    
+    'imgui-node-editor/imgui_node_editor_api.cpp',
+    'imgui-node-editor/imgui_node_editor_internal.h',    
+    'imgui-node-editor/imgui_node_editor.cpp',
+    'imgui-node-editor/imgui_node_editor.h'
 ]
 
 cpp = meson.get_compiler('cpp')
