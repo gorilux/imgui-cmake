@@ -56,7 +56,18 @@ if system == 'emscripten'
     '--preload-file', meson.current_source_dir() + '/imgui/misc/fonts@/fonts',
     '--use-preload-plugins'
     ]
+elif system == 'linux'
+    sources += [ 
+        'imgui/backends/imgui_impl_sdl.cpp' , 
+        'imgui/backends/imgui_impl_opengl3.cpp'
+    ]
 
+    sdl2_dep = dependency('sdl2')    
+    dependencies += [ sdl2_dep, dependency('opengl') ]    
+    # LIBS += $(LINUX_GL_LIBS) -ldl `sdl2-config --libs`
+
+	# CXXFLAGS += `sdl2-config --cflags`
+    # LINUX_GL_LIBS = -lGL
 else
     dx9_dep = cpp.find_library('d3d9', required: get_option('dx9'))
     if dx9_dep.found()
@@ -141,7 +152,8 @@ imgui = library('imgui',
 
 imgui_dep = declare_dependency(
     include_directories: include_dirs, 
+    dependencies: dependencies,
     link_with: imgui,     
     compile_args: compiler_args,
-    link_args:linker_args
+    link_args: linker_args
 )
