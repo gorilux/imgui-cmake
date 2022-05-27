@@ -3,7 +3,7 @@ project('imgui', 'cpp',
     license: 'MIT',
 )
 
-include_dirs = include_directories('imgui', 'imgui/backends', 'imgui-node-editor')
+include_dirs = include_directories('imgui', 'imgui/backends', 'imgui-node-editor', 'imgui-filebrowser')
 sources = [
     'imgui/imgui_demo.cpp', 
     'imgui/imgui_draw.cpp', 
@@ -21,7 +21,8 @@ sources = [
     'imgui-node-editor/imgui_node_editor_api.cpp',
     'imgui-node-editor/imgui_node_editor_internal.h',    
     'imgui-node-editor/imgui_node_editor.cpp',
-    'imgui-node-editor/imgui_node_editor.h'
+    'imgui-node-editor/imgui_node_editor.h',
+    'imgui-filebrowser/imfilebrowser.h'
 ]
 
 cpp = meson.get_compiler('cpp')
