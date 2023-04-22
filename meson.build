@@ -66,7 +66,7 @@ elif system == 'linux'
     ]
 
     sdl2_dep = dependency('sdl2')    
-    dependencies += [ sdl2_dep, dependency('opengl') ]    
+    dependencies += [ sdl2_dep, dependency('OpenGL') ]    
     # LIBS += $(LINUX_GL_LIBS) -ldl `sdl2-config --libs`
 
 	# CXXFLAGS += `sdl2-config --cflags`
