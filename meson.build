@@ -4,8 +4,7 @@ project('imgui', 'cpp',
 )
 
 # include_dirs = include_directories('imgui', 'imgui/backends', 'imgui-node-editor', 'imgui-filebrowser')
-include_dirs = include_directories('imgui', 
-    'imgui/backends',  'imgui-filebrowser')
+include_dirs = include_directories('imgui',  'imgui/backends',  'imgui-filebrowser')
 sources = [
     'imgui/imgui_demo.cpp', 
     'imgui/imgui_draw.cpp', 
@@ -36,14 +35,13 @@ system = host_machine.system()
 # renderer backends
 if system == 'emscripten'
     sources += [ 
-        'imgui/backends/imgui_impl_sdl.cpp' , 
+        'imgui/backends/imgui_impl_sdl2.cpp' , 
         'imgui/backends/imgui_impl_opengl3.cpp'
     ]
     compiler_args = [
     '-s', 'USE_SDL=2',    
     '-s', 'DISABLE_EXCEPTION_CATCHING=1',    
-    '-s', 'USE_SDL_IMAGE=2',     
-      
+    '-s', 'USE_SDL_IMAGE=2'    
     ]
 
     linker_args = [
@@ -51,17 +49,20 @@ if system == 'emscripten'
     '-s', 'USE_BOOST_HEADERS=1',
     '-s', 'ENVIRONMENT=web,worker',
     '-s', 'FORCE_FILESYSTEM=1',
-    '-s', 'ALLOW_MEMORY_GROWTH=1',
+    '-s', 'ALLOW_MEMORY_GROWTH=1',    
     '-s', 'NO_EXIT_RUNTIME=0',
     '-s', 'ASSERTIONS=1',
-    '-s', 'WASM=1',
-    '--no-heap-copy',
+    '-s', 'WASM=1',    
     '--preload-file', meson.current_source_dir() + '/imgui/misc/fonts@/fonts',
-    '--use-preload-plugins'
+    '--use-preload-plugins',
+    '-pthread'
     ]
+    ## '--no-heap-copy',
+    # '-s', 'INITIAL_MEMORY=128MB',
+    # '-s', 'TOTAL_STACK=64MB',
 elif system == 'linux'
     sources += [ 
-        'imgui/backends/imgui_impl_sdl.cpp' , 
+        'imgui/backends/imgui_impl_sdl2.cpp' , 
         'imgui/backends/imgui_impl_opengl3.cpp'
     ]
 
