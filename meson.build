@@ -28,7 +28,7 @@ sources = [
 
 cpp = meson.get_compiler('cpp')
 dependencies = []
-compiler_args = []
+compiler_args = ['-DIMGUI_DEFINE_MATH_OPERATORS']
 linker_args = []
 system = host_machine.system()
 
