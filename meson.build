@@ -11,6 +11,8 @@ sources = [
     'imgui/imgui_tables.cpp', 
     'imgui/imgui_widgets.cpp', 
     'imgui/imgui.cpp',
+    'imgui/misc/cpp/imgui_stdlib.cpp',
+    'imgui/misc/cpp/imgui_stdlib.h',
     # 'imgui-node-editor/crude_json.cpp',
     # 'imgui-node-editor/crude_json.h',
     # 'imgui-node-editor/imgui_bezier_math.h',    
