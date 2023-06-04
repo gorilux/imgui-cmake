@@ -4,7 +4,7 @@ project('imgui', 'cpp',
 )
 
 # include_dirs = include_directories('imgui', 'imgui/backends', 'imgui-node-editor', 'imgui-filebrowser')
-include_dirs = include_directories('imgui',  'imgui/backends',  'imgui-filebrowser')
+include_dirs = include_directories('imgui',  'imgui/backends',  'imgui-filebrowser', '.')
 sources = [
     'imgui/imgui_demo.cpp', 
     'imgui/imgui_draw.cpp', 
