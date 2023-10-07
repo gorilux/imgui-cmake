@@ -1,4 +1,6 @@
 //------------------------------------------------------------------------------
+// VERSION 0.9.1
+//
 // LICENSE
 //   This software is dual-licensed to the public domain and under the following
 //   license: you are granted a perpetual, irrevocable license to copy, modify,
@@ -13,10 +15,10 @@
 
 
 //------------------------------------------------------------------------------
-# include <imgui.h>
 # ifndef IMGUI_DEFINE_MATH_OPERATORS
 #     define IMGUI_DEFINE_MATH_OPERATORS
 # endif
+# include <imgui.h>
 # include <imgui_internal.h>
 
 
@@ -31,7 +33,9 @@ struct ImLine
 inline bool operator==(const ImVec2& lhs, const ImVec2& rhs);
 inline bool operator!=(const ImVec2& lhs, const ImVec2& rhs);
 inline ImVec2 operator*(const float lhs, const ImVec2& rhs);
+# if IMGUI_VERSION_NUM < 18955
 inline ImVec2 operator-(const ImVec2& lhs);
+# endif
 
 
 //------------------------------------------------------------------------------

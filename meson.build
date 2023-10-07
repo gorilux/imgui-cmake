@@ -4,7 +4,7 @@ project('imgui', 'cpp',
 )
 
 # include_dirs = include_directories('imgui', 'imgui/backends', 'imgui-node-editor', 'imgui-filebrowser')
-include_dirs = include_directories('imgui',  'imgui/backends',  'imgui-filebrowser', '.')
+include_dirs = include_directories('imgui',  'imgui/backends',  'imgui-filebrowser', 'imnodes', '.')
 sources = [
     'imgui/imgui_demo.cpp', 
     'imgui/imgui_draw.cpp', 
@@ -25,7 +25,12 @@ sources = [
     # 'imgui-node-editor/imgui_node_editor_internal.h',    
     # 'imgui-node-editor/imgui_node_editor.cpp',
     # 'imgui-node-editor/imgui_node_editor.h',
-    'imgui-filebrowser/imfilebrowser.h'
+    # 'imgui-node-editor/imgui_node_editor.h',
+    'imgui-filebrowser/imfilebrowser.h',
+    'imnodes/imnodes.h',
+    'imnodes/imnodes_internal.h',
+    'imnodes/imnodes.cpp',
+    
 ]
 
 cpp = meson.get_compiler('cpp')
