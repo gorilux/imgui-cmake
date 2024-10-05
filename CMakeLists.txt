@@ -21,6 +21,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<CONFIG>)
 set(CMAKE_PDB_OUTPUT_DIRECTORY     ${CMAKE_BINARY_DIR}/bin/$<CONFIG>)
 
 set(CMAKE_VERBOSE_MAKEFILE TRUE)
+set(IMGUI_STATIC_LIBRARY TRUE CACHE BOOL "Build ImGui as a static library") 
 
 if (WIN32)
   if (IMGUI_STATIC_LIBRARY)
@@ -95,7 +96,7 @@ source_group("Resource Files" FILES
 ##################################################################################################################
 # Target
 ##################################################################################################################
-add_library(${PROJECT_NAME} 
+add_library(${PROJECT_NAME} STATIC
     ${IMGUI_HEADERS_CXX_FILES}
     ${IMGUI_SOURCES_CXX_FILES}
     ${IMGUI_HEADERS_CXX_IMPL_FILES}

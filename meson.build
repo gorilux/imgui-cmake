@@ -152,7 +152,7 @@ endif
 
 endif
 
-imgui = library('imgui',
+imgui = static_library('imgui',
     sources,
     dependencies: dependencies,
     include_directories: include_dirs,
