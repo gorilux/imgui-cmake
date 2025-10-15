@@ -26,10 +26,8 @@ sources = [
     # 'imgui-node-editor/imgui_node_editor.cpp',
     # 'imgui-node-editor/imgui_node_editor.h',
     # 'imgui-node-editor/imgui_node_editor.h',
-    'imgui-filebrowser/imfilebrowser.h',
-    'imnodes/imnodes.h',
-    'imnodes/imnodes_internal.h',
-    'imnodes/imnodes.cpp',
+    # 'imgui-filebrowser/imfilebrowser.h',
+   
     
 ]
 
@@ -70,7 +68,10 @@ if system == 'emscripten'
 elif system == 'linux'
     sources += [ 
         'imgui/backends/imgui_impl_sdl2.cpp' , 
-        'imgui/backends/imgui_impl_opengl3.cpp'
+        'imgui/backends/imgui_impl_opengl3.cpp',
+        'imnodes/imnodes.h',
+        'imnodes/imnodes_internal.h',
+        'imnodes/imnodes.cpp',
     ]
 
     sdl2_dep = dependency('sdl2')    
@@ -151,6 +152,15 @@ else
 endif
 
 endif
+
+executable('binary_to_compressed_c',
+    'imgui/misc/fonts/binary_to_compressed_c.cpp',
+    dependencies: dependencies,
+    include_directories: include_dirs,
+    c_args:compiler_args, 
+    cpp_args:compiler_args, 
+    link_args:linker_args
+)
 
 imgui = static_library('imgui',
     sources,
