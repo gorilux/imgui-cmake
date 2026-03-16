@@ -33,7 +33,7 @@ sources = [
 
 cpp = meson.get_compiler('cpp')
 dependencies = []
-compiler_args = ['-DIMGUI_DEFINE_MATH_OPERATORS']
+compiler_args = ['-DIMGUI_DEFINE_MATH_OPERATORS', '-DImDrawIdx=unsigned int']
 linker_args = []
 system = host_machine.system()
 
@@ -65,17 +65,29 @@ if system == 'emscripten'
     ## '--no-heap-copy',
     # '-s', 'INITIAL_MEMORY=128MB',
     # '-s', 'TOTAL_STACK=64MB',
-elif system == 'linux'
-    sources += [ 
-        'imgui/backends/imgui_impl_sdl2.cpp' , 
+elif system == 'android'
+    sources += [
+        'imgui/backends/imgui_impl_sdl2.cpp',
         'imgui/backends/imgui_impl_opengl3.cpp',
-        'imnodes/imnodes.h',
-        'imnodes/imnodes_internal.h',
-        'imnodes/imnodes.cpp',
+    ]
+    compiler_args += ['-DIMGUI_IMPL_OPENGL_ES3']
+    sdl2_dep = dependency('sdl2')
+    dependencies += [
+        sdl2_dep,
+        cpp.find_library('EGL'),
+        cpp.find_library('GLESv3'),
+        cpp.find_library('android'),
+        cpp.find_library('log'),
     ]
 
-    sdl2_dep = dependency('sdl2')    
-    dependencies += [ sdl2_dep, dependency('OpenGL') ]    
+elif system == 'linux'
+    sources += [
+        'imgui/backends/imgui_impl_sdl2.cpp' ,
+        'imgui/backends/imgui_impl_opengl3.cpp'
+    ]
+
+    sdl2_dep = dependency('sdl2')
+    dependencies += [ sdl2_dep, dependency('OpenGL') ]
     # LIBS += $(LINUX_GL_LIBS) -ldl `sdl2-config --libs`
 
 	# CXXFLAGS += `sdl2-config --cflags`
