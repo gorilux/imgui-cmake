@@ -80,6 +80,29 @@ elif system == 'android'
         cpp.find_library('log'),
     ]
 
+elif system == 'windows'
+    # Windows via the mingw-w64 cross toolchain. Same backend pair as Linux:
+    # SDL2 for the platform layer, desktop GL for the renderer.
+    #
+    # This arm is REQUIRED — the generic `else` fallback below cannot serve
+    # Windows. It probes DX9/10/11/12, Metal, Vulkan, GLFW and Allegro, and
+    # it references 'imgui/backends/imgui_impl_sdl.cpp', a filename upstream
+    # retired when the backend was split into imgui_impl_sdl2.cpp /
+    # imgui_impl_sdl3.cpp. Configuring through it fails outright.
+    #
+    # opengl32.dll exports OpenGL 1.1 only, so every GL 2+ entry point has to
+    # be resolved at runtime. imgui's renderer backend carries its own private
+    # loader (imgui_impl_opengl3_loader.h) and is self-sufficient; the
+    # application-side GL calls live in libs/imgui_ecs, which loads them
+    # through glad.
+    sources += [
+        'imgui/backends/imgui_impl_sdl2.cpp',
+        'imgui/backends/imgui_impl_opengl3.cpp',
+    ]
+
+    sdl2_dep = dependency('sdl2')
+    dependencies += [ sdl2_dep, cpp.find_library('opengl32') ]
+
 elif system == 'linux'
     sources += [
         'imgui/backends/imgui_impl_sdl2.cpp' ,
@@ -165,14 +188,22 @@ endif
 
 endif
 
-executable('binary_to_compressed_c',
-    'imgui/misc/fonts/binary_to_compressed_c.cpp',
-    dependencies: dependencies,
-    include_directories: include_dirs,
-    c_args:compiler_args, 
-    cpp_args:compiler_args, 
-    link_args:linker_args
-)
+# binary_to_compressed_c is a developer helper that turns a font/image into a
+# C array. It is a BUILD-HOST tool, so cross builds skip it: the produced
+# binary could not run here anyway, and on Windows it fails to link outright —
+# `dependencies` carries SDL2, whose sdl2.pc pulls in -lSDL2main, and SDL2main
+# provides the entry point and then demands an SDL_main symbol that this
+# plain-main() tool does not define.
+if not meson.is_cross_build()
+    executable('binary_to_compressed_c',
+        'imgui/misc/fonts/binary_to_compressed_c.cpp',
+        dependencies: dependencies,
+        include_directories: include_dirs,
+        c_args:compiler_args, 
+        cpp_args:compiler_args, 
+        link_args:linker_args
+    )
+endif
 
 imgui = static_library('imgui',
     sources,
