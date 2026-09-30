@@ -1,7 +1,3 @@
-[submodule "imgui-filebrowser"]
-path = imgui-filebrowser
-url = https://github.com/gorilux/imgui-filebrowser.git
-branch = grlx
 [submodule "imgui"]
 path = imgui
 url = https://github.com/ocornut/imgui.git

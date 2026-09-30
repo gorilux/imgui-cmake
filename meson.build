@@ -3,8 +3,7 @@ project('imgui', 'cpp',
     license: 'MIT',
 )
 
-# include_dirs = include_directories('imgui', 'imgui/backends', 'imgui-node-editor', 'imgui-filebrowser')
-include_dirs = include_directories('imgui',  'imgui/backends',  'imgui-filebrowser', '.')
+include_dirs = include_directories('imgui',  'imgui/backends', '.')
 sources = [
     'imgui/imgui_demo.cpp', 
     'imgui/imgui_draw.cpp', 
@@ -26,7 +25,6 @@ sources = [
     # 'imgui-node-editor/imgui_node_editor.cpp',
     # 'imgui-node-editor/imgui_node_editor.h',
     # 'imgui-node-editor/imgui_node_editor.h',
-    # 'imgui-filebrowser/imfilebrowser.h',
    
     
 ]
